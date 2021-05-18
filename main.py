@@ -1,16 +1,7 @@
-from os import getenv
-
 from aiogram import Bot, Dispatcher, executor, types
+import settings
 
-BOT_API_TOKEN = getenv('BOT_API_TOKEN')
-CHAT_ID = int(getenv('CHAT_ID'))
-
-if not BOT_API_TOKEN:
-    raise Exception('BOT_API_TOKEN must be defined.')
-if not CHAT_ID:
-    raise Exception('CHAT_ID must be defined.')
-
-bot = Bot(token=BOT_API_TOKEN)
+bot = Bot(token=settings.BOT_API_TOKEN)
 dp = Dispatcher(bot)
 
 
@@ -24,7 +15,7 @@ async def start_cmd_handler(message: types.Message) -> None:
 
 @dp.message_handler(content_types=types.ContentType.ANY, chat_type=types.ChatType.PRIVATE)
 async def private_chat_message_handler(message: types.Message) -> None:
-    await bot.forward_message(CHAT_ID, from_chat_id=message.chat.id, message_id=message.message_id)
+    await bot.forward_message(settings.CHAT_ID, from_chat_id=message.chat.id, message_id=message.message_id)
     # TODO: redis.set(msg.message_id, message.chat.id)
 
 
